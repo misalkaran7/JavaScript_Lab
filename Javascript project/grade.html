@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Marksheet Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef7ff; /* light blue background */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            color: #00509e;
+            font-size: 26px;
+            margin: 20px 0;
+        }
+        .container {
+            width: 85%;
+            margin: auto;
+            background: #ffffff;
+            padding: 15px;
+            border: 2px solid #99c2ff;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 60px;
+            padding: 5px;
+            margin: 4px;
+            border: 1px solid #6ca0dc;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        table, th, td {
+            border: 1px solid #666;
+        }
+        th {
+            background: #ffe680; /* soft yellow */
+            padding: 8px;
+        }
+        td {
+            padding: 6px;
+            text-align: center;
+            background: #f9f9f9;
+        }
+        .student-info input {
+            margin: 5px;
+            padding: 6px;
+            border: 1px solid #6ca0dc;
+            border-radius: 4px;
+        }
+        .btn {
+            background: #28a745; /* green */
+            color: white;
+            padding: 8px 18px;
+            margin: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+        #marksheetTemplate {
+            display: none;
+            border: 2px solid #00509e;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+            background: #fdfdfd;
+        }
+        #marksheetTemplate h3 {
+            text-align: center;
+            color: #00509e;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+        .details {
+            margin: 10px 0;
+            text-align: center;
+        }
+        #total {
+            color: #d62828;
+            font-weight: bold;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Marksheet Generator</h2>
+
+    <div class="container">
+        <form id="marksForm">
+            <table>
+                <tr><th>Subject</th><th>Max Marks</th><th>Enter Marks</th></tr>
+                <tr><td>Compiler Construction</td><td>75</td><td><input type="number" max="75" name="cc"></td></tr>
+                <tr><td>Compiler Construction Lab</td><td>25</td><td><input type="number" max="25" name="cclab"></td></tr>
+                <tr><td>Computer Networks</td><td>75</td><td><input type="number" max="75" name="cn"></td></tr>
+                <tr><td>Computer Networks Lab</td><td>25</td><td><input type="number" max="25" name="cnlab"></td></tr>
+                <tr><td>Data Compression</td><td>100</td><td><input type="number" max="100" name="dc"></td></tr>
+                <tr><td>Project Based Learning</td><td>50</td><td><input type="number" max="50" name="pbl"></td></tr>
+                <tr><td>Flexi Credit Course</td><td>75</td><td><input type="number" max="75" name="fcc"></td></tr>
+                <tr><td>JavaScript</td><td>50</td><td><input type="number" max="50" name="js"></td></tr>
+            </table>
+            <div class="student-info">
+                <input type="text" name="studentName" placeholder="Enter Name" required style="width:180px;">
+                <input type="text" name="rollNo" placeholder="Enter Roll No" required style="width:120px;">
+            </div>
+            <button type="button" class="btn" onclick="generateMarksheet()">Generate Marksheet</button>
+        </form>
+    </div>
+
+    <div id="marksheetTemplate" class="container">
+        <div class="header">
+            <h3>SYMBIOSIS INSTITUTE OF TECHNOLOGY, NAGPUR</h3>
+            <p>Marksheet - Semester Examination</p>
+        </div>
+        <div class="details">
+            <b>Name:</b> <span id="studentName"></span> &nbsp;&nbsp; 
+            <b>Roll No:</b> <span id="displayRoll"></span>
+        </div>
+        <table id="resultTable"></table>
+        <h4 id="total"></h4>
+        <p style="text-align:right; margin-top:40px;">
+            <b>Controller of Examinations</b>
+        </p>
+        <button id="downloadBtn" class="btn no-print" onclick="downloadPDF()">Download PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        function getGrade(percentage) {
+            if (percentage >= 90) return "O";
+            if (percentage >= 80) return "A+";
+            if (percentage >= 70) return "A";
+            if (percentage >= 60) return "B+";
+            if (percentage >= 50) return "B";
+            if (percentage >= 45) return "C";
+            if (percentage >= 40) return "P";
+            return "F";
+        }
+
+        function generateMarksheet() {
+            let form = document.forms["marksForm"];
+            let name = form["studentName"].value;
+            let roll = form["rollNo"].value;
+            document.getElementById("studentName").textContent = name;
+            document.getElementById("displayRoll").textContent = roll;
+
+            let subjects = [
+                ["Compiler Construction", 75, form["cc"].value],
+                ["Compiler Construction Lab", 25, form["cclab"].value],
+                ["Computer Networks", 75, form["cn"].value],
+                ["Computer Networks Lab", 25, form["cnlab"].value],
+                ["Data Compression", 100, form["dc"].value],
+                ["Project Based Learning", 50, form["pbl"].value],
+                ["Flexi Credit Course", 75, form["fcc"].value],
+                ["JavaScript", 50, form["js"].value]
+            ];
+
+            let totalMarks = 0, obtained = 0;
+            let html = "<tr><th>Subject</th><th>Max Marks</th><th>Marks Obtained</th><th>Percentage</th><th>Grade</th></tr>";
+            subjects.forEach(sub => {
+                let per = (sub[2] / sub[1]) * 100;
+                if (isNaN(per)) per = 0;
+                html += `<tr><td>${sub[0]}</td><td>${sub[1]}</td><td>${sub[2]}</td><td>${per.toFixed(2)}%</td><td>${getGrade(per)}</td></tr>`;
+                totalMarks += parseInt(sub[1]);
+                obtained += parseInt(sub[2] || 0);
+            });
+
+            let overallPercent = (obtained / totalMarks) * 100;
+            html += `<tr><th colspan="5">Overall: ${overallPercent.toFixed(2)}% → Grade: ${getGrade(overallPercent)}</th></tr>`;
+
+            document.getElementById("resultTable").innerHTML = html;
+            document.getElementById("total").innerText = `Total: ${obtained} / ${totalMarks}`;
+            document.getElementById("marksheetTemplate").style.display = "block";
+        }
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF("p", "pt", "a4");
+
+            let downloadBtn = document.getElementById("downloadBtn");
+            downloadBtn.style.display = "none";
+
+            await html2canvas(document.getElementById("marksheetTemplate")).then(canvas => {
+                let imgData = canvas.toDataURL("image/png");
+                let imgProps= doc.getImageProperties(imgData);
+                let pdfWidth = doc.internal.pageSize.getWidth();
+                let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            });
+
+            downloadBtn.style.display = "block";
+            doc.save("marksheet.pdf");
+        }
+    </script>
+</body>
+</html>

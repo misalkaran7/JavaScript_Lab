@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilates Studio Admission Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdf6ec;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: #ffe4c4;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 350px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff7f50;
+      margin-bottom: 20px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1.5px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #ff7f50;
+      outline: none;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #ff7f50;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      font-size: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #ffd3b5;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .success {
+      color: #008000;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #d62828;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Pilates Studio Admission Form</h2>
+    <form id="admissionForm">
+      <label>Full Name:</label>
+      <input type="text" id="name" required>
+      <div id="nameMsg" class="error"></div>
+
+      <label>Email:</label>
+      <input type="email" id="email" required>
+      <div id="emailMsg" class="error"></div>
+
+      <label>Phone Number:</label>
+      <input type="text" id="phone" required>
+      <div id="phoneMsg" class="error"></div>
+
+      <label>Age:</label>
+      <input type="number" id="age" required>
+      <div id="ageMsg" class="error"></div>
+
+      <label>Experience Level:</label>
+      <select id="experience">
+        <option>Beginner</option>
+        <option>Intermediate</option>
+        <option>Advanced</option>
+      </select>
+
+      <label>Fitness Goals:</label>
+      <textarea id="goals" rows="2"></textarea>
+
+      <div class="checkbox">
+        <input type="checkbox" id="terms">
+        <label for="terms">&nbsp;I agree to the terms and conditions</label>
+      </div>
+
+      <button id="submitBtn" disabled>Submit</button>
+      <div id="formMsg" class="message"></div>
+    </form>
+  </div>
+
+  <script>
+    const fields = ['name', 'email', 'phone', 'age', 'terms'];
+    const valid = { name: false, email: false, phone: false, age: false, terms: false };
+    const btn = document.getElementById('submitBtn');
+
+    const checkValid = () => {
+      btn.disabled = !Object.values(valid).every(v => v);
+    };
+
+    document.getElementById('name').addEventListener('input', e => {
+      const val = e.target.value.trim();
+      valid.name = /^[A-Za-z ]{2,}$/.test(val);
+      document.getElementById('nameMsg').textContent = valid.name ? "" : "Enter a valid name";
+      checkValid();
+    });
+
+    document.getElementById('email').addEventListener('input', e => {
+      const val = e.target.value.trim();
+      valid.email = /^[^@]+@[^@]+\.[^@]+$/.test(val);
+      document.getElementById('emailMsg').textContent = valid.email ? "" : "Invalid email";
+      checkValid();
+    });
+
+    document.getElementById('phone').addEventListener('input', e => {
+      const val = e.target.value.trim();
+      valid.phone = /^[0-9]{10}$/.test(val);
+      document.getElementById('phoneMsg').textContent = valid.phone ? "" : "Invalid phone number";
+      checkValid();
+    });
+
+    document.getElementById('age').addEventListener('input', e => {
+      const age = parseInt(e.target.value);
+      valid.age = age >= 12 && age <= 100;
+      document.getElementById('ageMsg').textContent = valid.age ? "" : "Age must be 12–100";
+      checkValid();
+    });
+
+    document.getElementById('terms').addEventListener('change', e => {
+      valid.terms = e.target.checked;
+      checkValid();
+    });
+
+    document.getElementById('admissionForm').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('formMsg').innerHTML = `<div class="success">✓ Form Submitted Successfully!</div>`;
+      e.target.reset();
+      Object.keys(valid).forEach(k => valid[k] = false);
+      checkValid();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science Department - SIT Nagpur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        /* Navigation */
+        nav {
+            background-color: #8a1e1e;
+            color: white;
+            padding: 15px;
+        }
+        nav .title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #af2020;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .hero h1 {
+            font-size: 36px;
+        }
+        .hero button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .hero .btn1 {
+            background-color: white;
+            color: #891d1d;
+        }
+        .hero .btn2 {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        /* Table Section */
+        .section {
+            padding: 40px 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 14px;
+        }
+        th {
+            background: #f1f5f9;
+            text-align: left;
+        }
+        a.resume {
+            background: #a91010;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        a.resume:hover {
+            background: #b71515;
+        }
+
+        /* About */
+        .about {
+            background: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .about h2 {
+            color: #cc0808;
+        }
+
+        /* Contact */
+        .contact {
+            background: #f1f5f9;
+            padding: 40px 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <span class="title">🎓 SIT Nagpur</span>
+        <a href="#home">Home</a>
+        <a href="#database">Database</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <h1>Computer Science Department</h1>
+        <p>52 Years of Symbiosis Legacy</p>
+        <button class="btn1" onclick="showWelcome()">Welcome Message</button>
+        <button class="btn2" onclick="showInfo()">Student Info</button>
+    </section>
+
+    <!-- Database -->
+    <section id="database" class="section">
+        <h2>📋 Student Database</h2>
+        <table>
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Year</th>
+                <th>Resume</th>
+            </tr>
+            <tr>
+                <td>SIT071</td>
+                <td>Chiranjivi</td>
+                <td>Computer Science</td>
+                <td>3rd Year</td>
+                <td><a class="resume" href="#">View</a></td>
+            </tr>
+            <tr>
+                <td>SIT071</td>
+                <td>kavish</td>
+                <td>Computer Science</td>
+                <td>3rd Year</td>
+                <td><a class="resume" href="#">View</a></td>
+            </tr><tr>
+                <td>SIT071</td>
+                <td>Karan</td>
+                <td>Computer Science</td>
+                <td>3rd Year</td>
+                <td><a class="resume" href="#">View</a></td>
+            </tr><tr>
+                <td>SIT071</td>
+                <td>Karan Misal</td>
+                <td>Computer Science</td>
+                <td>3rd Year</td>
+                <td><a class="resume" href="#">View</a></td>
+            </tr><tr>
+                <td>SIT071</td>
+                <td>rohit</td>
+                <td>Computer Science</td>
+                <td>3rd Year</td>
+                <td><a class="resume" href="#">View</a></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about">
+        <h2>About Our Department</h2>
+        <p>The Computer Science Department at SIT Nagpur is committed to excellence in education, research, and innovation.</p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact">
+        <h2>Contact Info</h2>
+        <p>📍 Symbiosis Institute of Technology, Nagpur</p>
+        <p>📞 +91 9823356929</p>
+        <p>✉️ btechadmissionsnagpur@siu.edu.in</p>
+        <div class="footer">&copy; 2025 SIT Nagpur. All rights reserved.</div>
+    </section>
+
+    <script>
+        function showWelcome() {
+            alert("Welcome to SIT Nagpur!");
+        }
+        function showInfo() {
+            alert("Student Information: 1200+ Students, 95% Placements.");
+        }
+    </script>
+</body>
+</html>

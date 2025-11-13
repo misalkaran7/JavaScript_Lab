@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Min/Max Finder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f2ff; /* light blue */
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border: 2px solid #3399ff;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 450px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+      background-color: #3399ff;
+      color: white;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #3399ff;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #ff9933; /* orange focus */
+      background-color: #fff8e6;
+    }
+
+    button {
+      display: block;
+      margin: 15px auto;
+      padding: 10px 20px;
+      background-color: #ff9933;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #e68a00;
+    }
+
+    .results {
+      margin-top: 15px;
+      display: none;
+    }
+
+    .result-item {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .max-box {
+      background-color: #28a745; /* green */
+    }
+
+    .min-box {
+      background-color: #dc3545; /* red */
+    }
+
+    .error {
+      margin-top: 15px;
+      color: white;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+      background-color: #ff4d4d;
+      padding: 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Array Min/Max Finder</h1>
+
+    <label for="arrayInput">Enter your array:</label>
+    <input type="text" id="arrayInput" placeholder="Example: 1, 5, 3, 9, 2">
+
+    <button onclick="findMinMax()">Find Min & Max</button>
+
+    <div id="results" class="results">
+      <div class="result-item max-box">Maximum Value: <span id="maxValue">-</span></div>
+      <div class="result-item min-box">Minimum Value: <span id="minValue">-</span></div>
+    </div>
+
+    <div id="error" class="error">Please enter valid numbers separated by commas!</div>
+  </div>
+
+  <script>
+    function findMinMax() {
+      const input = document.getElementById('arrayInput').value.trim();
+      const resultsDiv = document.getElementById('results');
+      const errorDiv = document.getElementById('error');
+      const maxValueSpan = document.getElementById('maxValue');
+      const minValueSpan = document.getElementById('minValue');
+
+      resultsDiv.style.display = "none";
+      errorDiv.style.display = "none";
+
+      if (!input) {
+        showError("Please enter some numbers!");
+        return;
+      }
+
+      try {
+        const numbers = input.split(",").map(str => {
+          const num = parseFloat(str.trim());
+          if (isNaN(num)) throw new Error();
+          return num;
+        });
+
+        if (numbers.length === 0) {
+          showError("Please enter at least one number!");
+          return;
+        }
+
+        const maxValue = Math.max(...numbers);
+        const minValue = Math.min(...numbers);
+
+        maxValueSpan.textContent = maxValue;
+        minValueSpan.textContent = minValue;
+        resultsDiv.style.display = "block";
+
+      } catch {
+        showError("Please enter valid numbers separated by commas!");
+      }
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById("error");
+      errorDiv.textContent = message;
+      errorDiv.style.display = "block";
+    }
+  </script>
+</body>
+</html>

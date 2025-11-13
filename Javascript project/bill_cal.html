@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Vehicles Store</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --primary: #5A20CB;
+    --secondary: #C34FF0;
+    --accent: #FF77B7;
+    --bg: #F5F5F5;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+header h1 {
+    font-size: 3rem;
+    color: var(--primary);
+}
+header p {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.tabs-nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.tab-btn {
+    padding: 10px 25px;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+    background: #ddd;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.tab-btn.active { background: var(--primary); color: white; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.15); }
+
+.product-card h3 { margin: 15px 0 10px; font-size: 1.2rem; color: var(--primary);}
+.product-card p { margin: 5px 0; color: #666; }
+.price { font-weight: 700; margin-top: 10px; color: var(--accent); }
+
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+.quantity-controls button {
+    width: 30px; height: 30px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-cart-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    background: var(--secondary);
+    color: white;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.add-cart-btn:hover { background: var(--accent); }
+
+#cart-items li {
+    background: white;
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 10px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+}
+
+#cart-summary {
+    margin-top: 20px;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+#cart-summary div { display: flex; justify-content: space-between; margin: 8px 0; }
+#cart-summary .total { font-weight: 700; font-size: 1.2rem; color: var(--accent); }
+
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1><i class="fas fa-car-side"></i> Luxury Vehicles</h1>
+<p>Choose from top-class bikes & cars for your next ride!</p>
+</header>
+
+<div class="tabs-nav">
+<button class="tab-btn active" data-tab="products">Vehicles</button>
+<button class="tab-btn" data-tab="cart">Cart (<span id="cart-count">0</span>)</button>
+</div>
+
+<div id="products" class="tab-content active">
+<div class="product-grid">
+<div class="product-card">
+<div style="font-size:50px;">🏍️</div>
+<h3>Sports Bike</h3>
+<p>High performance ride</p>
+<p class="price">₹1,50,000</p>
+<div class="quantity-controls">
+<button onclick="changeQuantity('bike',-1)">-</button>
+<span id="qty-bike">1</span>
+<button onclick="changeQuantity('bike',1)">+</button>
+</div>
+<button class="add-cart-btn" onclick="addToCart('bike')">Add to Cart</button>
+</div>
+
+<div class="product-card">
+<div style="font-size:50px;">🚗</div>
+<h3>Sedan Car</h3>
+<p>Luxury and comfort</p>
+<p class="price">₹8,00,000</p>
+<div class="quantity-controls">
+<button onclick="changeQuantity('car',-1)">-</button>
+<span id="qty-car">1</span>
+<button onclick="changeQuantity('car',1)">+</button>
+</div>
+<button class="add-cart-btn" onclick="addToCart('car')">Add to Cart</button>
+</div>
+
+<div class="product-card">
+<div style="font-size:50px;">🛵</div>
+<h3>Scooter</h3>
+<p>City friendly ride</p>
+<p class="price">₹65,000</p>
+<div class="quantity-controls">
+<button onclick="changeQuantity('scooter',-1)">-</button>
+<span id="qty-scooter">1</span>
+<button onclick="changeQuantity('scooter',1)">+</button>
+</div>
+<button class="add-cart-btn" onclick="addToCart('scooter')">Add to Cart</button>
+</div>
+
+<div class="product-card">
+<div style="font-size:50px;">🏎️</div>
+<h3>Sports Car</h3>
+<p>Speed and style</p>
+<p class="price">₹25,00,000</p>
+<div class="quantity-controls">
+<button onclick="changeQuantity('sportscar',-1)">-</button>
+<span id="qty-sportscar">1</span>
+<button onclick="changeQuantity('sportscar',1)">+</button>
+</div>
+<button class="add-cart-btn" onclick="addToCart('sportscar')">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div id="cart" class="tab-content">
+<h2>Cart Items</h2>
+<ul id="cart-items"></ul>
+<div id="cart-summary">
+<div><span>Subtotal:</span><span id="subtotal">₹0</span></div>
+<div class="total"><span>Total:</span><span id="total">₹0</span></div>
+</div>
+</div>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const contents = document.querySelectorAll('.tab-content');
+tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        contents.forEach(c=>c.classList.remove('active'));
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+
+const productPrices = {
+    bike: 150000,
+    car: 800000,
+    scooter: 65000,
+    sportscar: 2500000
+};
+
+let quantities = {bike:1, car:1, scooter:1, sportscar:1};
+let cart = [];
+
+function changeQuantity(product, change){
+    quantities[product] = Math.max(1, quantities[product]+change);
+    document.getElementById(`qty-${product}`).textContent = quantities[product];
+}
+
+function addToCart(product){
+    const index = cart.findIndex(i=>i.name===product);
+    if(index>=0){
+        cart[index].qty += quantities[product];
+    } else {
+        cart.push({name: product, qty: quantities[product], price: productPrices[product]});
+    }
+    document.getElementById('cart-count').textContent = cart.reduce((a,b)=>a+b.qty,0);
+    renderCart();
+}
+
+function renderCart(){
+    const ul = document.getElementById('cart-items');
+    ul.innerHTML = '';
+    cart.forEach(i=>{
+        const li = document.createElement('li');
+        li.innerHTML = `${i.name} <span>Qty: ${i.qty} | ₹${(i.qty*i.price).toLocaleString()}</span>`;
+        ul.appendChild(li);
+    });
+    updateTotals();
+}
+
+function updateTotals(){
+    const subtotal = cart.reduce((sum,i)=>sum+i.qty*i.price,0);
+    const total = subtotal;
+    document.getElementById('subtotal').textContent = `₹${subtotal.toLocaleString()}`;
+    document.getElementById('total').textContent = `₹${total.toLocaleString()}`;
+}
+</script>
+</body>
+</html>

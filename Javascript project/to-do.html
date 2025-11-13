@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> To-Do App</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
+    min-height: 100vh;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .container {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    width: 400px;
+    padding: 25px;
+    box-shadow: 0 0 25px rgba(59,130,246,0.3);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #60a5fa;
+    letter-spacing: 1px;
+  }
+  .input-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background: #334155;
+    color: #f8fafc;
+  }
+  button {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #3b82f6;
+    color: white;
+    font-weight: 500;
+    transition: 0.3s;
+  }
+  button:hover { background: #2563eb; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.3s;
+  }
+  li:hover { background: #1e293b; }
+  .task-text {
+    flex: 1;
+    margin: 0 10px;
+    font-size: 15px;
+  }
+  .done { text-decoration: line-through; color: #94a3b8; }
+  .actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: 5px;
+    transition: 0.2s;
+  }
+  .edit { color: #60a5fa; }
+  .delete { color: #f87171; }
+  .save { color: #34d399; }
+  .cancel { color: #cbd5e1; }
+  .progress {
+    text-align: center;
+    margin-top: 15px;
+    color: #93c5fd;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Chiranjivi’s To-Do List</h1>
+  <div class="input-box">
+    <input type="text" id="taskInput" placeholder="Enter a task...">
+    <button id="addBtn">Add</button>
+  </div>
+
+  <ul id="taskList"></ul>
+  <div id="progress" class="progress"></div>
+</div>
+
+<script>
+  let tasks = [];
+  let editId = null;
+
+  const input = document.getElementById("taskInput");
+  const list = document.getElementById("taskList");
+  const progress = document.getElementById("progress");
+
+  function updateProgress() {
+    const done = tasks.filter(t => t.done).length;
+    progress.textContent = tasks.length
+      ? `${done}/${tasks.length} tasks done`
+      : "Start adding tasks ";
+  }
+
+  function render() {
+    list.innerHTML = "";
+    tasks.forEach(t => {
+      const li = document.createElement("li");
+      li.innerHTML = editId === t.id
+        ? `<input type="text" id="edit-${t.id}" value="${t.text}">
+           <div class="actions">
+             <button class="save" onclick="saveEdit(${t.id})">Save</button>
+             <button class="cancel" onclick="cancelEdit()">Cancel</button>
+           </div>`
+        : `<input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleDone(${t.id})">
+           <span class="task-text ${t.done ? "done" : ""}">${t.text}</span>
+           <div class="actions">
+             <button class="edit" onclick="editTask(${t.id})">Edit</button>
+             <button class="delete" onclick="deleteTask(${t.id})">Delete</button>
+           </div>`;
+      list.appendChild(li);
+    });
+    updateProgress();
+  }
+
+  function addTask() {
+    const text = input.value.trim();
+    if (!text) return;
+    tasks.push({ id: Date.now(), text, done: false });
+    input.value = "";
+    render();
+  }
+
+  function deleteTask(id) {
+    tasks = tasks.filter(t => t.id !== id);
+    render();
+  }
+
+  function toggleDone(id) {
+    tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+    render();
+  }
+
+  function editTask(id) {
+    editId = id;
+    render();
+    document.getElementById(`edit-${id}`).focus();
+  }
+
+  function saveEdit(id) {
+    const val = document.getElementById(`edit-${id}`).value.trim();
+    if (!val) return;
+    tasks = tasks.map(t => t.id === id ? { ...t, text: val } : t);
+    editId = null;
+    render();
+  }
+
+  function cancelEdit() {
+    editId = null;
+    render();
+  }
+
+  document.getElementById("addBtn").onclick = addTask;
+  input.addEventListener("keypress", e => e.key === "Enter" && addTask());
+
+  render();
+</script>
+</body>
+</html>
