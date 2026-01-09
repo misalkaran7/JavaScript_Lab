@@ -1,1 +1,1 @@
-# JavaScript_Lab
+# JavaScript_Projects
